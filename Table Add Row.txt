@@ -18,8 +18,174 @@ $("#boxAllCheck").click(function(){
 });
 */
 
-	$("#buttonInsert").click(function(){
-		addTableRow();
-		});
-
+$("#buttonInsert").click(function(){
+	addTableRow();
 	});
+
+});
+
+
+/**
+*/
+<script>
+$(document).ready(function () {
+
+  // CSSで非表示にした1行目の行を複製し、その行の下に挿入
+  $("#p2146-2-tbody > tr").eq(0).clone(true).insertAfter($("#p2146-2-tbody > tr")).eq(0);
+
+  // 行を追加する
+  $(document).on("click", ".addList", function () {
+    $("#p2146-2-tbody > tr").eq(0).clone(true).insertAfter(
+      $(this).parent().parent();
+    );
+  });
+
+  // 行を削除する
+  $(document).on("click", ".removeList", function () {
+    $(this).parent().parent().remove();
+  });
+
+  // 行を一つ上に移動させる
+  $(document).on("click", "#p2146-2-tbody > tr:gt(1) .upList", function () {
+    var t = $(this).parent().parent();
+    if(t.prev("tr")) {
+      t.insertBefore(t.prev("tr")[0]);
+    }
+  });
+
+  // 行を一つ下に移動させる
+  $(document).on("click", ".downList", function () {
+    var t = $(this).parent().parent();
+    if(t.next("tr")) {
+      t.insertAfter(t.next("tr")[0]);
+    }
+  });
+
+  // 行の一部を変更する
+  $(document).on("change", ".changeList", function () {
+    $(this).parent().next().html($(this).val());
+  });
+
+});
+</script>
+
+/**--------------javascript start-----------------------------------*/
+
+/**
+ * 行を追加する
+ *
+ *テーブル内の「＋」ボタンが押されると、以下のaddList（）関数が呼び出されます。
+ *処理内容としては、テーブルの1行目の「行（tr要素）」のクローンを作成し、
+ *それを「＋」ボタンが押された行の下に追加します。
+ *
+ */
+function addList(obj) {
+
+  // tbody要素に指定したIDを取得し、変数「tbody」に代入
+  var tbody = document.getElementById("p2146-tbody");
+  // objの親の親のノードを取得し（つまりtr要素）、変数「tr」に代入
+  var tr = obj.parentNode.parentNode;
+  // tbodyタグ直下のノード（行）を複製し、変数「list」に代入
+  var list = tbody.childNodes[0].cloneNode(true);
+  // 複製した行の2番目のセルを指定し、変数「td」に代入
+  var td = list.childNodes[1];
+  // 複製した行の2番目のセルの内容を「A」に置き換え
+  td.textContent = "A";
+  //　複製したノード「list」を直後の兄弟ノードの上に挿入
+  // （「tr」の下に挿入）
+  tbody.insertBefore(list, tr.nextSibling);
+
+}
+
+/**
+ * 行を削除する
+ *
+ *テーブル内の「-」ボタンが押されると、以下のremoveList（）関数が呼び出されます。
+ *処理内容としては、単純に「-」ボタンが押された行を削除します。
+ *
+ */
+function removeList(obj) {
+
+  // tbody要素に指定したIDを取得し、変数「tbody」に代入
+  var tbody = document.getElementById("p2146-tbody");
+  // objの親の親のノードを取得し（つまりtr要素）、変数「tr」に代入
+  var tr = obj.parentNode.parentNode;
+  // 「tbody」の子ノード「tr」を削除
+  tbody.removeChild(tr);
+
+}
+
+
+/**
+ *行を一つ上に移動させる
+ *
+ *テーブル内の「↑」が押されると、以下のupList（）関数が呼び出されます。
+ *処理内容としては、「↑」が押された行の上に「行が存在した場合」に、その行の上に挿入させます。
+ *
+ */
+function upList(obj) {
+
+  // tbody要素に指定したIDを取得し、変数「tbody」に代入
+  var tbody = document.getElementById("p2146-tbody");
+  // objの親の親のノードを取得し（つまりtr要素）、変数「tr」に代入
+  var tr = obj.parentNode.parentNode;
+
+  // もし「tr」の直前の兄弟ノード名が「TR」だった場合
+  // （上に「行」が存在している場合）
+  if(tr.previousSibling.nodeName === "tr") {
+    // 「tr」を直前の兄弟ノードの上に挿入
+    tbody.insertBefore(tr, tr.previousSibling);
+  }
+
+}
+
+/**
+ * 行を一つ下に移動させる
+ *
+ * テーブル内の「↓」が押されると、以下のdownList（）関数が呼び出されます。
+ * 処理内容としては、「↓」が押された行の下に「行が存在した場合」に、その行の下に挿入させます。
+ *
+ */
+function downList(obj) {
+
+  // tbody要素に指定したIDを取得し、変数「tbody」に代入
+  var tbody = document.getElementById("p2146-tbody");
+  // objの親の親のノードを取得し（つまりtr要素）、変数「tr」に代入
+  var tr = obj.parentNode.parentNode;
+
+  // もし「tr」の直前の兄弟ノード名が「TR」だった場合
+  // （上に「行」が存在している場合）
+  if(tr.nextSibling.nodeName === "tr"){
+    // 「tr」を直後の兄弟ノードの上に挿入
+    tbody.insertBefore(tr.nextSibling, tr);
+  }
+
+}
+
+/**
+ * 行の一部を変更する
+ *
+ *テーブル内の<select>要素のオプションが選択されると、以下のchangeList（）関数が呼び出されます。
+ *処理内容としては、新たにtd要素を作成し、その要素内を選択されたオプションの値を取得して置き換え、
+ *さらに既存のtd要素と置き換える。
+ */
+function changeList(obj) {
+
+  // 選択したオプションの値を取得し、変数「type」に代入
+  var type = obj.value;
+  // objの親の親のノードを取得し（つまりtr要素）、変数「tr」に代入
+  var tr = obj.parentNode.parentNode;
+  // 「tr」の2番目のセルを指定し、変数「td」に代入
+  var td = tr.childNodes[1];
+
+  // 新たにtd要素を作成し、変数「cell」に代入
+  var cell = document.createElement("td");
+  // 「cell」内のHTMLを「type」に置き換え
+  cell.innerHTML = type;
+  // 「td」を「cell」に置き換え
+  tr.replaceChild(cell, td);
+
+}
+/**--------------javascript end-----------------------------------*/
+
+
