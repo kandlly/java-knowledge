@@ -1,0 +1,18 @@
+function addTableRow(){
+	//Add table row in last
+	$("#tb-test tbody > tr:last").after("<tr><td><input type=checkbox name=checkName></td><td>${serverTime}</td><td>tdadd2</td></tr>");
+}
+
+
+$(function(){
+
+/* 	$("#boxAllCheck").on("change", function() {
+	    $('input[name=checkName]').prop('checked', this.checked);
+	});
+ */
+
+	$("#buttonInsert").click(function(){
+		addTableRow();
+		});
+
+	});
