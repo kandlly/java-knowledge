@@ -4,12 +4,19 @@ function addTableRow(){
 }
 
 
+	
 $(function(){
 
 /* 	$("#boxAllCheck").on("change", function() {
 	    $('input[name=checkName]').prop('checked', this.checked);
 	});
  */
+ 
+/*
+$("#boxAllCheck").click(function(){
+ $('input[name=checkName]').prop('checked', this.checked);;
+});
+*/
 
 	$("#buttonInsert").click(function(){
 		addTableRow();
