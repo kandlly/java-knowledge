@@ -25,8 +25,8 @@ $("#buttonInsert").click(function(){
 });
 
 
-/**
-*/
+/*********** jquery table delete add mover**/
+
 <script>
 $(document).ready(function () {
 
@@ -189,3 +189,37 @@ function changeList(obj) {
 /**--------------javascript end-----------------------------------*/
 
 
+/********** table ****************/
+<table id="p2146-2-table">
+
+<thead>
+<tr>
+  <th>リスト選択</th>
+  <th>リスト名</th>
+  <th>リスト順</th>
+  <th>追加/削除</th>
+</tr>
+</thead>
+
+<tbody id="p2146-2-tbody">
+<tr>
+  <td>
+    <select class="changeList">
+      <option>A</option><option>B</option><option>C</option>
+    </select>
+  </td>
+  <td>A</td>
+  <td>
+    <img src="up.png" alt="↑" class="upList" />上へ　
+    <img src="down.png" alt="↓" class="downList" />下へ
+  </td>
+  <td>
+    <input value="+" type="button" class="addList" />　
+    <input value="-" type="button" class="removeList" />
+  </td>
+</tr>
+</tbody>
+
+</table>
+
+/****************************/
