@@ -1,0 +1,110 @@
+?取csv文件，并返回一个 泛型字符串数?
+
+public List<String[]> readCSV(String fileName)
+    {
+        File file = new File(fileName);
+        InputStreamReader reader = null;
+        List<String[]> fileContext = null;
+        BufferedReader br = null;
+        try {
+            if (file.isFile() && file.exists())
+            {
+                fileContext = new ArrayList<String[]>();
+                reader = new InputStreamReader(new FileInputStream(file));
+                br = new BufferedReader(reader);
+                String tempReadText = "";
+                while((tempReadText = br.readLine()) != null)
+                {
+                    String[] tempArray = tempReadText.split(",");
+                    fileContext.add(tempArray);
+                }
+            }
+            for(String[] val : fileContext)
+                for(String v : val)
+                System.out.println(v);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return fileContext;
+    }
+    
+---------------------------------------------------------------------------
+以多行，多列?出csv 文件
+
+csv 文件可以用Excel打?， 如果是?出一个table 的?，使用Excel 就方便很多了。
+??是： 如何分行， 分列？
+理?上 ： 分列使用 ， 号分割， 分行用 \n .
+可以用以上方式，会??列可以分?，但是不?行。 看上去不?? \n.
+解决方式是使用 encodeURIComponent ?行??/
+
+
+  <head>  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">  
+  <meta name="author" content="oscar999">  
+  <title>  
+  </title>  
+  <script>  
+    function clickDownload(aLink)  
+    {  
+         var str = "col1,col2,col3\nvalue1,value2,value3";  
+         str =  encodeURIComponent(str);  
+         aLink.href = "data:text/csv;charset=utf-8,"+str;  
+         aLink.click();  
+    }  
+  </script>   
+  </head>  
+  <body>  
+    <a id="test" onclick="clickDownload(this)" download="downlaod.csv" href="#">download</a>  
+  </body>  
+</html>  
+
+-------------------------------------------------------------------------
+Chrome下?的文件名
+
+以上使用 a 的download 属性可以指定下?的文件名及后?。 但是在Chrome ?行的?候会??， Chrome ?根不理会?个。
+下?名是 "下?" 或是 "download".
+
+var blob = new Blob([data], { type: 'text/csv' }); //new way  
+var csvUrl = URL.createObjectURL(blob);  
+document.getElementById("mylink").href = csvUrl;   
+
+
+
+-------------------------------------------------------------------------
+在 D3.js 中?取 CSV 文件
+
+用它?取文件的代?如下
+
+d3.csv("table.csv",function(error,csvdata){
+
+	if(error){
+		console.log(error);
+	}
+	console.log(csvdata);
+	
+});
+
+我?可以看到，?量中 csvdata 是保存了一个数?，数?中的?个元素都一个?象，?个?象里都有 age 、name、sex 三个成??量。?三个成??量正是所??的表格的?一排的三个?元格。如此，我?就可以在代?中???用了。
+
+for( var i=0; i<csvdata.length; i++ ){
+	var name = csvdata[i].name;
+	var sex = csvdata[i].sex;
+	var age = csvdata[i].age;
+	console.log( "name: " + name + "\n" +
+				 "sex: " + sex + "\n" +
+				 "age: " + age  );
+}
+
+			
+在 D3 的官方 API 中，看上去似乎?有一些函数： parse 、parseRows、format、formatRows。但??我的??，只有 format 一个函数可以使用，其它的都是在 D3 内部使用的。基本上需要?入 CSV 的数据的情况下，只要有上面第3?所叙述的内容就足?了。下面是 format 的使用方法。
+
+
+d3.csv("table.csv",function(error,csvdata){		
+	var str = d3.csv.format( csvdata );			
+	console.log(str.length);
+	console.log(str);	
+});
+
+
+
