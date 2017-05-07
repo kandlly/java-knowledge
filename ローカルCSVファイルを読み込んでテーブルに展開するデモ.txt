@@ -1,0 +1,64 @@
+
+<input id="file" type="file" />
+<div id="view"></div>
+
+
+<!-- java script -->
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">// <![CDATA[
+$(document).ready(function(){
+    $("#file").change(function(e){
+        var file = e.target.files[0];
+        // FileReader.onloadイベントに
+        // ファイル選択時に行いたい処理を書く
+        var reader = new FileReader();
+        reader.onload = function(e){
+            // 選択したCSVファイルから２次元配列を生成
+            var arr = toArray(e.target.result);
+            // ２次元配列からテーブルを生成
+            var table = createTableFromArray(arr);
+            // divにテーブルを挿入
+            $("#view").empty();
+            $("#view").append(table);
+        };
+        // Textとしてファイルを読み込む
+        reader.readAsText(file);
+    });
+},false);
+// CSVテキストを２次元配列にする 
+function toArray(csv){
+    var result = new Array();
+    var rows = csv.split("\n");
+    $(rows).each(function(){
+        result.push(this.split(","));
+    });
+    return result;
+}
+// ２次元配列からテーブルを生成する
+function createTableFromArray(arr){
+    var $table = $("<table>");
+    var $tbody = $("<tbody>");
+    $(arr).each(function(){
+        var $tr = $("<tr>");
+        $(this).each(function(){
+            $tr.append($("<td>").append(escapse(this)));
+        });
+        $tbody.append($tr);
+    });
+    return $table.append($tbody);
+}
+// タグをエスケープ
+function escapse(t){
+    return $("<div>").text(t).html();
+}
+// ]]></script>
+
+
+
+$(document).readyの中がメインとなるロジックで、下３つのfunctionはユーティリティです。サンプルなのでエラーは無視しています。内容は概ね以下のような感じ
+
+inputのchangeハンドラでメインとなる処理を実行（6～24行）
+FileReaderのonloadハンドラで読み込んだCSVをtableに展開する12行～20行）
+プレースホルダのdivタグに展開したtableを挿し込む（18、19行）
+FileReader.readAsTextでtextとしてファイルを読み込む（22行）
+画像なんかを読み込みたい時はFileReader.readAsDataURLを使います。base64でエンコードされた文字列を取得できるので、即表示したい場合は、その文字列をimgタグのsrcに挿し込むだけで実現出来ます
