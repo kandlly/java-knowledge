@@ -109,21 +109,26 @@
                         <input type="text" class="form-control" id="client-name" placeholder="顧客名を入力してください">
                     </div>
                 </div>
-                <div class="form-row mb-3">
-                    <div class="form-group col-md-6 form-group-date">
+                
+                    <div class="form-row mb-3">
+                    <div class="form-group col-md-6">
                         <label for="registration-date">登録日</label>
-                        <input type="date" class="form-control" id="registration-date">
-                        <span class="mx-2">-</span>
-                        <input type="date" class="form-control" id="registration-date-end">
+                        <div class="form-group-date">
+                            <input type="date" class="form-control" id="registration-date-start">
+                            <span class="mx-2">-</span>
+                            <input type="date" class="form-control" id="registration-date-end">
+                        </div>
                     </div>
-                    <div class="form-group col-md-6 form-group-date">
+                    <div class="form-group col-md-6">
                         <label for="response-date">対応日</label>
-                        <input type="date" class="form-control" id="response-date">
-                        <span class="mx-2">-</span>
-                        <input type="date" class="form-control" id="response-date-end">
+                        <div class="form-group-date">
+                            <input type="date" class="form-control" id="response-date-start">
+                            <span class="mx-2">-</span>
+                            <input type="date" class="form-control" id="response-date-end">
+                        </div>
                     </div>
                 </div>
-
+                
                 <div class="form-group mb-3">
                     <label for="detailed-conditions">詳談の条件</label>
                     <div class="checkbox-container">
