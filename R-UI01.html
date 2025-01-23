@@ -1,10 +1,305 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ご相談 - 検索パネル</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .form-group-date {
+            display: flex;
+            align-items: center;
+        }
+        .form-group-date label {
+            margin-right: 10px;
+        }
+        .square-button {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 2px;
+        }
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Step Colors */
+        .step-black {
+            color: black;
+        }
+        .step-orange {
+            color: orange;
+        }
+        .step-gray {
+            color: gray;
+        }
+
+        /* Button Colors */
+        .button-black {
+            background-color: black;
+            color: white;
+        }
+        .button-orange {
+            background-color: orange;
+            color: white;
+        }
+        .button-gray {
+            background-color: gray;
+            color: white;
+        }
+
+        .d-flex .align-self-center {
+            margin: 0 10px;
+        }
+
+        /* Checkbox Styling */
+        .checkbox-wrapper {
+            display: inline-block;
+            width: 120px;
+            height: 50px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+        .checkbox-wrapper input[type="checkbox"] {
+            display: none;
+        }
+        .checkbox-wrapper label {
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checkbox-wrapper input[type="checkbox"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #0056b3;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center" onclick="togglePanel()">
+            <h2 class="mb-0">ご相談</h2>
+            <span class="toggle-button" id="panel-toggle-button">-</span>
+        </div>
+        <div class="card-body" id="panel-body">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center" onclick="toggleSearchConditions()">
+                <h3 class="mb-0"><span class="toggle-button" id="conditions-toggle-button">-</span> 検索条件</h3>
+            </div>
+            <div id="search-conditions" style="display: block;">
+                <div class="form-row mb-3">
+                    <div class="form-group col-md-6">
+                        <label for="search-name">検索名称</label>
+                        <input type="text" class="form-control" id="search-name" placeholder="検索名称を入力してください">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="client-name">顧客名</label>
+                        <input type="text" class="form-control" id="client-name" placeholder="顧客名を入力してください">
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="form-group col-md-6 form-group-date">
+                        <label for="registration-date">登録日</label>
+                        <input type="date" class="form-control" id="registration-date">
+                        <span class="mx-2">-</span>
+                        <input type="date" class="form-control" id="registration-date-end">
+                    </div>
+                    <div class="form-group col-md-6 form-group-date">
+                        <label for="response-date">対応日</label>
+                        <input type="date" class="form-control" id="response-date">
+                        <span class="mx-2">-</span>
+                        <input type="date" class="form-control" id="response-date-end">
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="detailed-conditions">詳談の条件</label>
+                    <div class="checkbox-container">
+                        <div class="row w-100">
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition1">
+                                <label for="condition1">条件1</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition2">
+                                <label for="condition2">条件2</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition3">
+                                <label for="condition3">条件3</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition4">
+                                <label for="condition4">条件4</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition5">
+                                <label for="condition5">条件5</label>
+                            </div>
+                        </div>
+                        <div class="row w-100 mt-3">
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition6">
+                                <label for="condition6">条件6</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition7">
+                                <label for="condition7">条件7</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition8">
+                                <label for="condition8">条件8</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition9">
+                                <label for="condition9">条件9</label>
+                            </div>
+                            <div class="col-2 text-center">
+                                <input type="checkbox" id="condition10">
+                                <label for="condition10">条件10</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="form-row mb-3">
+                    <div class="form-group col-md-6">
+                        <label for="correspondent">対応者条件</label>
+                        <select id="correspondent" class="form-control">
+                            <option value="">選択してください</option>
+                            <option value="person1">対応者1</option>
+                            <option value="person2">対応者2</option>
+                            <option value="person3">対応者3</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="approver">承認者条件</label>
+                        <select id="approver" class="form-control">
+                            <option value="">選択してください</option>
+                            <option value="approver1">承認者1</option>
+                            <option value="approver2">承認者2</option>
+                            <option value="approver3">承認者3</option>
+                        </select>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">検索結果</h3>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span>合計件数: 10件</span>
+                <div>
+                    <label for="sort-method" class="mr-2">ソート方法</label>
+                    <select id="sort-method" class="form-control d-inline-block" style="width: auto;">
+                        <option value="date">日付順</option>
+                        <option value="name">名前順</option>
+                    </select>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 50%;">列1</th>
+                        <th style="width: 50%;">列2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="5">列1の内容<br>行1<br>行2<br>行3<br>行4<br>行5</td>
+                        <td>
+                            <div class="d-flex justify-content-center flex-wrap">
+                                <!-- Step 1 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-black">step1</div>
+                                    <button class="square-button button-black">1</button>
+                                </div>
+                                <span class="align-self-center step-black">&gt;</span>
+
+                                <!-- Step 2 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-orange">step2</div>
+                                    <button class="square-button button-orange">2</button>
+                                </div>
+                                <span class="align-self-center step-orange">&gt;</span>
+
+                                <!-- Step 3 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-gray">step3</div>
+                                    <button class="square-button button-gray">3</button>
+                                </div>
+                                <span class="align-self-center step-gray">&gt;</span>
+
+                                <!-- Step 4 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-black">step4</div>
+                                    <button class="square-button button-black">4</button>
+                                </div>
+                                <span class="align-self-center step-black">&gt;</span>
+
+                                <!-- Step 5 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-orange">step5</div>
+                                    <button class="square-button button-orange">5</button>
+                                </div>
+                                <span class="align-self-center step-orange">&gt;</span>
+
+                                <!-- Step 6 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-gray">step6</div>
+                                    <button class="square-button button-gray">6</button>
+                                </div>
+                                <span class="align-self-center step-gray">&gt;</span>
+
+                                <!-- Step 7 -->
+                                <div class="text-center mr-2">
+                                    <div class="step-black">step7</div>
+                                    <button class="square-button button-black">7</button>
+                                </div>
+                                <span class="align-self-center step-black">&gt;</span>
+
+                                <!-- Step 8 -->
+                                <div class="text-center">
+                                    <div class="step-orange">step8</div>
+                                    <button class="square-button button-orange">8</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-center mt-3">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">&larr;</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">&rarr;</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
     <script>
         function togglePanel() {
             const panelBody = document.getElementById('panel-body');
