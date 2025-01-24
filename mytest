@@ -1,39 +1,151 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Page</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>表格分页</title>
+    <!-- 引入Bootstrap 4 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        .required-label {
-            color: red;
-            background-color: pink;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.9em;
+        .pagination {
+            justify-content: center;
         }
-        #sidebar {
-            transition: margin-left 0.3s;
-        }
-        #sidebar.collapsed {
-            margin-left: -250px;
+
+        .pagination .page-item {
+            cursor: pointer;
         }
     </style>
 </head>
 
+<body>
+    <div class="container mt-5">
+        <h2>检索结果</h2>
+        <!-- 表单 -->
+        <div class="form-group">
+            <label for="searchInput">请输入搜索条件</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="搜索...">
+        </div>
 
+        <!-- 结果表格 -->
+        <div id="resultDiv">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>内容</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTable">
+                    <!-- 动态填充数据 -->
+                </tbody>
+            </table>
+
+            <!-- 分页控件 -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div>共 <span id="totalItems">15</span> 件</div>
+                <nav class="mx-auto">
+                    <ul class="pagination" id="pagination">
+                        <!-- 动态生成分页按钮 -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入jQuery和Bootstrap 4 JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.addEventListener('click', function () {
-                sidebar.classList.toggle('collapsed');
-            });
+        $(document).ready(function () {
+            // 模拟的15条数据
+            const data = [
+                { id: 1, content: '内容1' },
+                { id: 2, content: '内容2' },
+                { id: 3, content: '内容3' },
+                { id: 4, content: '内容4' },
+                { id: 5, content: '内容5' },
+                { id: 6, content: '内容6' },
+                { id: 7, content: '内容7' },
+                { id: 8, content: '内容8' },
+                { id: 9, content: '内容9' },
+                { id: 10, content: '内容10' },
+                { id: 11, content: '内容11' },
+                { id: 12, content: '内容12' },
+                { id: 13, content: '内容13' },
+                { id: 14, content: '内容14' },
+                { id: 15, content: '内容15' },
+            ];
+
+            const pageSize = 10;
+            let currentPage = 1;
+            const totalPages = Math.ceil(data.length / pageSize);
+
+            // 渲染表格内容
+            function renderTable(page) {
+                const start = (page - 1) * pageSize;
+                const end = start + pageSize;
+                const pageData = data.slice(start, end);
+
+                $('#resultTable').empty();
+                pageData.forEach(item => {
+                    $('#resultTable').append(`
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.content}</td>
+                        </tr>
+                    `);
+                });
+            }
+
+            // 渲染分页
+            function renderPagination() {
+                $('#pagination').empty();
+                let paginationHtml = '';
+
+                // 上一页按钮
+                paginationHtml += `
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="goToPage(${currentPage - 1})">&laquo; 上一页</a>
+                    </li>
+                `;
+
+                // 分页数字按钮
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationHtml += `
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                        </li>
+                    `;
+                }
+
+                // 下一页按钮
+                paginationHtml += `
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="#" onclick="goToPage(${currentPage + 1})">下一页 &raquo;</a>
+                    </li>
+                `;
+
+                $('#pagination').append(paginationHtml);
+                $('#totalItems').text(data.length); // 显示数据总件数
+            }
+
+            // 跳转到指定页
+            window.goToPage = function (page) {
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderTable(currentPage);
+                renderPagination();
+            };
+
+            // 初始化渲染
+            renderTable(currentPage);
+            renderPagination();
         });
     </script>
 </body>
+
 </html>
