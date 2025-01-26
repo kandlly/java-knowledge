@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Group Example</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            margin: auto;
+        }
+
+        .btn-custom {
+            border: none;
+            padding: 10px 30px;
+            font-size: 14px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        .btn-active {
+            background-color: #fff;
+            color: #000;
+            z-index: 2;
+        }
+
+        .btn-inactive {
+            background-color: #e9ecef;
+            color: #495057;
+            z-index: 1;
+        }
+
+        .btn-left {
+            margin-right: -15px;
+            /* Overlap */
+        }
+
+        .btn-right {
+            margin-left: -15px;
+            /* Overlap */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+        }
+
+        .table-header div {
+            font-weight: bold;
+        }
+
+        .table-row {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .table-row .row-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-row .row-section:last-child {
+            border-bottom: none;
+        }
+
+        .row-section div {
+            width: 48%;
+        }
+
+        .step {
+            color: #d9534f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        Button guoup
+    </div>
+    <!-- Button guoup-->
+    <div class="container mt-5">
+        <div class="btn-container">
+            <button id="btn-left" class="btn btn-custom btn-left btn-active"
+                onclick="toggleActive('btn-left', 'btn-right')">シンプル検索</button>
+            <button id="btn-right" class="btn btn-custom btn-right btn-inactive"
+                onclick="toggleActive('btn-right', 'btn-left')">詳細検索</button>
+        </div>
+    </div>
+
+
+    <div>
+        Table
+    </div>
+    <!-- Table start-->
+    <div class="table-container">
+        <!-- Header -->
+        <div class="table-header">
+            <div>合計 30 件</div>
+            <div>並び替え方法: 日付順</div>
+        </div>
+
+        <!-- Row 1 -->
+        <div class="table-row">
+            <div class="row-section">
+                <div>2024年9月1日ご相談</div>
+                <div>ロスプランニング</div>
+            </div>
+            <div class="row-section">
+                <div>契約内容: 自宅</div>
+                <div>登録日: 2024/3/25</div>
+            </div>
+            <div class="row-section">
+                <div>担当者: 中田 </div>
+                <div>対応状況: 検討中</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="table-row">
+            <div class="row-section">
+                <div>ご相談</div>
+                <div>モデリング</div>
+            </div>
+            <div class="row-section">
+                <div>対応日: 2024/7/14</div>
+                <div>対応者: 清水</div>
+            </div>
+            <div class="row-section">
+                <div>契約内容: 特定保険</div>
+                <div>対応状況: 完了</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="table-row">
+            <div class="row-section">
+                <div>契約中</div>
+                <div>2024年11月20日〜12月25日</div>
+            </div>
+            <div class="row-section">
+                <div>登録日: 2024/11/20</div>
+                <div>対応状況: 確認中</div>
+            </div>
+            <div class="row-section">
+                <div>担当者: 横田</div>
+                <div>進捗状況: 進行中</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+            <div class="row-section">
+                <div>商品検討</div>
+                <div class="step">商品決定</div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Table end-->
+
+    <div>
+        Table動的のデータ
+    </div>
+    <!-- Table動的のデータ start-->
+    <div style="border: 1px solid #ccc; max-height: 400px; overflow-y: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>列1</th>
+                    <th>列2</th>
+                    <th>列3</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- 动态数据行 -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Table動的のデータ　end-->
+
+    <!-- Optional JavaScript -->
+    <script>
+        function toggleActive(activeId, inactiveId) {
+            const activeButton = document.getElementById(activeId);
+            const inactiveButton = document.getElementById(inactiveId);
+
+            // Swap active and inactive states
+            activeButton.classList.add('btn-active');
+            activeButton.classList.remove('btn-inactive');
+
+            inactiveButton.classList.add('btn-inactive');
+            inactiveButton.classList.remove('btn-active');
+        }
+
+        // 模拟动态数据
+        const data = [
+            { col1: "数据1-1", col2: "数据1-2", col3: "数据1-3" },
+            { col1: "数据2-1", col2: "数据2-2", col3: "数据2-3" },
+            { col1: "数据3-1", col2: "数据3-2", col3: "数据3-3" },
+            // 添加更多数据
+        ];
+
+        const tableBody = document.getElementById("table-body");
+
+        // 渲染数据行
+        data.forEach((row) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+      <td>${row.col1}</td>
+      <td>${row.col2}</td>
+      <td>${row.col3}</td>
+    `;
+            tableBody.appendChild(tr);
+        });
+    </script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
