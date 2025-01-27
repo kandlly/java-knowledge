@@ -94,6 +94,51 @@
             color: #d9534f;
             font-weight: bold;
         }
+
+        /**Radio**/
+        .radio-container {
+            width: 100%;
+            /* 宽度为父容器的 100% */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-container.selected {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .radio-container input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            /* 垂直排列选项 */
+            width: 100%;
+        }
+
+        .group-wrapper {
+            width: 33.33%;
+            /* 每组宽度为容器的三分之一 */
+            padding: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            /* 保证多行布局 */
+        }
     </style>
 </head>
 
@@ -218,6 +263,69 @@
     </div>
     <!-- Table動的のデータ　end-->
 
+    <!-- Radio start-->
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Radio Group 1 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 1</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-1">
+                        <label for="radio1-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-2">
+                        <label for="radio1-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-3">
+                        <label for="radio1-3">Option 3</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radio Group 2 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 2</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-1">
+                        <label for="radio2-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-2">
+                        <label for="radio2-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-3">
+                        <label for="radio2-3">Option 3</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radio Group 3 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 3</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-1">
+                        <label for="radio3-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-2">
+                        <label for="radio3-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-3">
+                        <label for="radio3-3">Option 3</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Radio end-->
+
     <!-- Optional JavaScript -->
     <script>
         function toggleActive(activeId, inactiveId) {
@@ -251,6 +359,17 @@
       <td>${row.col3}</td>
     `;
             tableBody.appendChild(tr);
+        });
+
+        // Radio group
+        document.querySelectorAll('.radio-container input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const groupName = this.name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+                    input.parentElement.classList.remove('selected');
+                });
+                this.parentElement.classList.add('selected');
+            });
         });
     </script>
 
