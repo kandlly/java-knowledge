@@ -1,149 +1,418 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>表格分页</title>
-    <!-- 引入Bootstrap 4 CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>chatGTP Bootstrap 4 Radio Groups</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .pagination {
-            justify-content: center;
+        .radio-container {
+            width: 100%;
+            /* 宽度为父容器的 100% */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
         }
 
-        .pagination .page-item {
+        .radio-container.selected {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .radio-container input[type="radio"] {
+            margin-right: 10px;
             cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            /* 垂直排列选项 */
+            width: 100%;
+        }
+
+        .group-wrapper {
+            width: 33.33%;
+            /* 每组宽度为容器的三分之一 */
+            padding: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            /* 保证多行布局 */
+        }
+
+        /* typography*/
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .column {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .japanese-bold {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: bold;
+        }
+
+        .english-bold {
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: bold;
+        }
+
+        .japanese-regular {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: normal;
+        }
+
+        .english-regular {
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: normal;
+        }
+
+        .text {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .b-20 {
+            font-size: 20pt;
+        }
+
+        .b-16 {
+            font-size: 16pt;
+        }
+
+        .b-15 {
+            font-size: 15pt;
+        }
+
+        .b-14 {
+            font-size: 14pt;
+        }
+
+        .b-12 {
+            font-size: 12pt;
+        }
+
+        .b-11 {
+            font-size: 11pt;
+        }
+
+        .r-15 {
+            font-size: 15pt;
+        }
+
+        .r-14 {
+            font-size: 14pt;
+        }
+
+        .r-12 {
+            font-size: 12pt;
+        }
+
+        .r-11 {
+            font-size: 11pt;
+        }
+
+        .title {
+            font-size: 18pt;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /**color**/
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .color-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .color-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+
+        .color-square {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .color-description {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Colors */
+        .white {
+            background-color: #ffffff;
+        }
+
+        .black {
+            background-color: #000000;
+        }
+
+        .primary {
+            background-color: #007bff;
+        }
+
+        .secondary {
+            background-color: #6c757d;
+        }
+
+        .accent {
+            background-color: #17a2b8;
+        }
+
+        .accention {
+            background-color: #ffc107;
+        }
+
+        .txt-gray-1 {
+            background-color: #6c757d;
+        }
+
+        /**shape**/
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        /* 普通 tab 和 checkbox */
+        .tab-container {
+            float: left;
+            shape-outside: circle(50%);
+            shape-margin: 4px;
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            clip-path: circle(50%);
+            margin-right: 20px;
+        }
+
+        .tab-container input[type="checkbox"] {
+            margin: 10px;
+        }
+
+        /* チェックフォームバー */
+        .check-form-bar {
+            float: left;
+            shape-outside: inset(0 10px);
+            shape-margin: 6px;
+            width: 200px;
+            height: 50px;
+            background-color: lightcoral;
+            margin-left: 20px;
+        }
+
+        .check-form-bar label {
+            padding: 10px;
+        }
+
+        /* 清除浮动 */
+        .clear {
+            clear: both;
         }
     </style>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h2>检索结果</h2>
-        <!-- 表单 -->
-        <div class="form-group">
-            <label for="searchInput">请输入搜索条件</label>
-            <input type="text" class="form-control" id="searchInput" placeholder="搜索...">
-        </div>
+        <div class="row">
+            <!-- Radio Group 1 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 1</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-1">
+                        <label for="radio1-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-2">
+                        <label for="radio1-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group1" id="radio1-3">
+                        <label for="radio1-3">Option 3</label>
+                    </div>
+                </div>
+            </div>
 
-        <!-- 结果表格 -->
-        <div id="resultDiv">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>编号</th>
-                        <th>内容</th>
-                    </tr>
-                </thead>
-                <tbody id="resultTable">
-                    <!-- 动态填充数据 -->
-                </tbody>
-            </table>
+            <!-- Radio Group 2 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 2</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-1">
+                        <label for="radio2-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-2">
+                        <label for="radio2-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group2" id="radio2-3">
+                        <label for="radio2-3">Option 3</label>
+                    </div>
+                </div>
+            </div>
 
-            <!-- 分页控件 -->
-            <div class="d-flex justify-content-between align-items-center">
-                <div>共 <span id="totalItems">15</span> 件</div>
-                <nav class="mx-auto">
-                    <ul class="pagination" id="pagination">
-                        <!-- 动态生成分页按钮 -->
-                    </ul>
-                </nav>
+            <!-- Radio Group 3 -->
+            <div class="group-wrapper">
+                <h5>Radio Group 3</h5>
+                <div class="radio-group">
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-1">
+                        <label for="radio3-1">Option 1</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-2">
+                        <label for="radio3-2">Option 2</label>
+                    </div>
+                    <div class="radio-container">
+                        <input type="radio" name="group3" id="radio3-3">
+                        <label for="radio3-3">Option 3</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 引入jQuery和Bootstrap 4 JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Typography-->
+    <div class="container">
+        <div class="column japanese-bold">
+            <div class="title">Noto Sans JP Bold</div>
+            <div class="text b-20">これはB-20サイズの日本語テキストです。</div>
+            <div class="text b-16">これはB-16サイズの日本語テキストです。</div>
+            <div class="text b-15">これはB-15サイズの日本語テキストです。</div>
+            <div class="text b-14">これはB-14サイズの日本語テキストです。</div>
+            <div class="text b-12">これはB-12サイズの日本語テキストです。</div>
+            <div class="text b-11">これはB-11サイズの日本語テキストです。</div>
+        </div>
+        <div class="column english-bold">
+            <div class="title">Inter Tight Bold</div>
+            <div class="text b-20">This is English text at B-20 size.</div>
+            <div class="text b-16">This is English text at B-16 size.</div>
+            <div class="text b-15">This is English text at B-15 size.</div>
+            <div class="text b-14">This is English text at B-14 size.</div>
+            <div class="text b-12">This is English text at B-12 size.</div>
+            <div class="text b-11">This is English text at B-11 size.</div>
+        </div>
+        <div class="column japanese-regular">
+            <div class="title">Noto Sans JP Regular</div>
+            <div class="text r-15">これはR-15サイズの日本語テキストです。</div>
+            <div class="text r-14">これはR-14サイズの日本語テキストです。</div>
+            <div class="text r-12">これはR-12サイズの日本語テキストです。</div>
+            <div class="text r-11">これはR-11サイズの日本語テキストです。</div>
+        </div>
+        <div class="column english-regular">
+            <div class="title">Inter Tight Regular</div>
+            <div class="text r-15">This is English text at R-15 size.</div>
+            <div class="text r-12">This is English text at R-12 size.</div>
+        </div>
+    </div>
 
+    <!-- color-->
+    <h1>Color Palette</h1>
+    <div class="color-container">
+        <div class="color-box">
+            <div class="color-square white"></div>
+            <div class="color-description">White</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square black"></div>
+            <div class="color-description">Black</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square primary"></div>
+            <div class="color-description">Primary</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square secondary"></div>
+            <div class="color-description">Secondary</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square accent"></div>
+            <div class="color-description">Accent</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square accention"></div>
+            <div class="color-description">Accention</div>
+        </div>
+        <div class="color-box">
+            <div class="color-square txt-gray-1"></div>
+            <div class="color-description">Text Gray 1</div>
+        </div>
+    </div>
+
+    <!-- shape-->
+    <h2>普通的 Tab 和 Checkbox 示例</h2>
+    <div class="tab-container">
+        <input type="checkbox" id="tab1">
+        <label for="tab1">Tab 1</label>
+    </div>
+
+    <h2>チェックフォームバー 示例</h2>
+    <div class="check-form-bar">
+        <label for="check1">チェック項目:</label>
+        <input type="checkbox" id="check1">
+    </div>
+
+    <div class="clear"></div>
     <script>
-        $(document).ready(function () {
-            // 模拟的15条数据
-            const data = [
-                { id: 1, content: '内容1' },
-                { id: 2, content: '内容2' },
-                { id: 3, content: '内容3' },
-                { id: 4, content: '内容4' },
-                { id: 5, content: '内容5' },
-                { id: 6, content: '内容6' },
-                { id: 7, content: '内容7' },
-                { id: 8, content: '内容8' },
-                { id: 9, content: '内容9' },
-                { id: 10, content: '内容10' },
-                { id: 11, content: '内容11' },
-                { id: 12, content: '内容12' },
-                { id: 13, content: '内容13' },
-                { id: 14, content: '内容14' },
-                { id: 15, content: '内容15' },
-            ];
-
-            const pageSize = 10;
-            let currentPage = 1;
-            const totalPages = Math.ceil(data.length / pageSize);
-
-            // 渲染表格内容
-            function renderTable(page) {
-                const start = (page - 1) * pageSize;
-                const end = start + pageSize;
-                const pageData = data.slice(start, end);
-
-                $('#resultTable').empty();
-                pageData.forEach(item => {
-                    $('#resultTable').append(`
-                        <tr>
-                            <td>${item.id}</td>
-                            <td>${item.content}</td>
-                        </tr>
-                    `);
+        document.querySelectorAll('.radio-container input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const groupName = this.name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+                    input.parentElement.classList.remove('selected');
                 });
-            }
-
-            // 渲染分页
-            function renderPagination() {
-                $('#pagination').empty();
-                let paginationHtml = '';
-
-                // 上一页按钮
-                paginationHtml += `
-                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="goToPage(${currentPage - 1})">&laquo; 上一页</a>
-                    </li>
-                `;
-
-                // 分页数字按钮
-                for (let i = 1; i <= totalPages; i++) {
-                    paginationHtml += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
-                        </li>
-                    `;
-                }
-
-                // 下一页按钮
-                paginationHtml += `
-                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="goToPage(${currentPage + 1})">下一页 &raquo;</a>
-                    </li>
-                `;
-
-                $('#pagination').append(paginationHtml);
-                $('#totalItems').text(data.length); // 显示数据总件数
-            }
-
-            // 跳转到指定页
-            window.goToPage = function (page) {
-                if (page < 1 || page > totalPages) return;
-                currentPage = page;
-                renderTable(currentPage);
-                renderPagination();
-            };
-
-            // 初始化渲染
-            renderTable(currentPage);
-            renderPagination();
+                this.parentElement.classList.add('selected');
+            });
         });
     </script>
 </body>
