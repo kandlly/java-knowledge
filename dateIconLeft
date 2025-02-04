@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期输入框小图标向左对齐</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* 让日期选择的小图标靠左 */
+        input[type="date"] {
+            position: relative;
+            padding-left: 35px;
+            /* 预留空间给小图标 */
+        }
+
+        /* 调整日期选择小图标的位置 */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            left: 10px;
+            /* 控制小图标向左对齐 */
+            cursor: pointer;
+            transform: scale(1.2);
+            /* 可调整大小 */
+        }
+
+        /* 隐藏默认日期选择器图标 */
+        /* input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+        } */
+
+        /* 调整输入框样式，使文本不会被图标遮挡 */
+        /* .date-input {
+            padding-left: 40px;
+        } */
+
+        /* 让小图标显示在左侧 */
+        /* .input-group .input-group-prepend {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        } */
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <input type="date" class="form-control">
+    </div>
+
+
+    <div class="container mt-5">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text bg-transparent border-0">
+                    <i class="fas fa-calendar-alt"></i>
+                </span>
+            </div>
+            <input type="date" class="form-control date-input">
+        </div>
+    </div>
+</body>
+
+</html>
