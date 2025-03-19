@@ -1,0 +1,136 @@
+方法 1：使用 form 的 reset() 方法（推荐）
+
+如果所有的检索条件都在 <form> 标签内，可以直接调用 reset() 方法：
+<form id="searchForm">
+    <input type="text" name="keyword" placeholder="关键词">
+    <select name="category">
+        <option value="">选择分类</option>
+        <option value="1">分类1</option>
+        <option value="2">分类2</option>
+    </select>
+    <input type="checkbox" name="filter1"> 选项1
+    <input type="checkbox" name="filter2"> 选项2
+    <button type="button" onclick="resetForm()">清空</button>
+</form>
+
+<script>
+    function resetForm() {
+        document.getElementById("searchForm").reset();
+    }
+</script>
+
+------------------------------------------------------------------------------------
+
+方法 2：手动清空所有输入框
+
+如果没有 <form>，或者不想用 reset()，可以使用 JavaScript 遍历所有控件：
+<input type="text" id="keyword" placeholder="关键词">
+<select id="category">
+    <option value="">选择分类</option>
+    <option value="1">分类1</option>
+    <option value="2">分类2</option>
+</select>
+<input type="checkbox" id="filter1"> 选项1
+<input type="checkbox" id="filter2"> 选项2
+<button onclick="clearFilters()">清空</button>
+
+<script>
+    function clearFilters() {
+        document.getElementById("keyword").value = "";
+        document.getElementById("category").selectedIndex = 0;
+        document.getElementById("filter1").checked = false;
+        document.getElementById("filter2").checked = false;
+    }
+</script>
+
+
+------------------------------------------------------------------------------------
+方法 3：使用 querySelectorAll 统一清空
+
+如果有多个表单控件，手动一个个 getElementById 可能比较麻烦，可以用 querySelectorAll 批量处理：
+<form id="searchForm">
+    <input type="text" name="keyword">
+    <select name="category">
+        <option value="">选择分类</option>
+        <option value="1">分类1</option>
+        <option value="2">分类2</option>
+    </select>
+    <input type="checkbox" name="filter1">
+    <input type="checkbox" name="filter2">
+    <button type="button" onclick="clearAll()">清空</button>
+</form>
+
+<script>
+    function clearAll() {
+        document.querySelectorAll("#searchForm input, #searchForm select").forEach(el => {
+            if (el.type === "checkbox" || el.type === "radio") {
+                el.checked = false;
+            } else if (el.tagName === "SELECT") {
+                el.selectedIndex = 0;
+            } else {
+                el.value = "";
+            }
+        });
+    }
+</script>
+------------------------------------------------------------------------------------
+方法 2：使用 getElementsByTagName（适用于所有 div）
+
+如果你的搜索条件分布在多个 div，可以用 getElementsByTagName 遍历：
+<div class="search-container">
+    <input type="text" name="keyword">
+    <select name="category">
+        <option value="">选择分类</option>
+        <option value="1">分类1</option>
+        <option value="2">分类2</option>
+    </select>
+    <input type="checkbox" name="filter1"> 选项1
+    <input type="checkbox" name="filter2"> 选项2
+</div>
+<div class="search-container">
+    <input type="text" name="anotherKeyword">
+    <select name="anotherCategory">
+        <option value="">选择分类</option>
+        <option value="3">分类3</option>
+        <option value="4">分类4</option>
+    </select>
+    <input type="checkbox" name="filter3"> 选项3
+    <input type="checkbox" name="filter4"> 选项4
+</div>
+
+<button type="button" onclick="clearAllDivs()">清空</button>
+
+<script>
+    function clearAllDivs() {
+        document.querySelectorAll(".search-container").forEach(div => {
+            div.querySelectorAll("input, select").forEach(el => {
+                if (el.type === "checkbox" || el.type === "radio") {
+                    el.checked = false;
+                } else if (el.tagName === "SELECT") {
+                    el.selectedIndex = 0;
+                } else {
+                    el.value = "";
+                }
+            });
+        });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
