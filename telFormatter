@@ -1,0 +1,52 @@
+public class JapanPhoneNumberFormatter {
+    public static String formatPhoneNumber(String phoneNumber) {
+        // 去除所有非数字字符
+        phoneNumber = phoneNumber.replaceAll("\\D", "");
+        int length = phoneNumber.length();
+
+        // 处理 10 位和 11 位的标准日本电话号码
+        if (length == 10) {
+            // 10位号码 (城市号码，如东京03, 大阪06, 仙台022等)
+            if (phoneNumber.startsWith("03") || phoneNumber.startsWith("06")) {
+                return phoneNumber.replaceFirst("(\\d{2})(\\d{4})(\\d{4})", "$1-$2-$3"); // 例如 03-xxxx-xxxx
+            } else {
+                return phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3"); // 例如 052-xxx-xxxx
+            }
+        } else if (length == 11) {
+            // 11位号码 (乡村及偏远地区，如0997-xx-xxxx)
+            return phoneNumber.replaceFirst("(\\d{4})(\\d{2})(\\d{4})", "$1-$2-$3");
+        } else {
+            // 处理其他长度的号码（后两组为 4 位，剩余的给第一组）
+            if (length < 8) {
+                return phoneNumber; // 长度不够无法格式化，直接返回
+            }
+            
+            int firstPartLength = length - 8; // 计算第一部分长度
+            String firstPart = phoneNumber.substring(0, firstPartLength);
+            String secondPart = phoneNumber.substring(firstPartLength, firstPartLength + 4);
+            String thirdPart = phoneNumber.substring(firstPartLength + 4);
+
+            return firstPart + "-" + secondPart + "-" + thirdPart;
+        }
+    }
+
+    public static void main(String[] args) {
+        // 测试不同长度的电话号码
+        String[] testNumbers = {
+            "0312345678",   // 东京 03-1234-5678
+            "0612345678",   // 大阪 06-1234-5678
+            "0521234567",   // 名古屋 052-123-4567
+            "09971234567",  // 乡村 0997-12-3456
+            "01372123456",  // 北海道 01372-12-3456
+            "12345678",     // 3-4-4  (普通格式)
+            "123456789",    // 3-4-4
+            "1234567890",   // 3-4-4
+            "12345678901",  // 4-4-4
+            "123456789012"  // 4-4-4
+        };
+
+        for (String number : testNumbers) {
+            System.out.println(formatPhoneNumber(number));
+        }
+    }
+}
