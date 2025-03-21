@@ -29,10 +29,33 @@
             color: #007bff;
             /* 图标颜色 */
         }
+
+.icon-circle2 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+.icon-mask2 {
+    width: 20px;
+    height: 20px;
+    mask-image: url('icon.svg');
+    -webkit-mask-image: url('icon.svg'); 
+    background-color: #007bff; /* 这里可以改变颜色 */
+}
     </style>
 </head>
 
 <body>
+
+<div class="icon-circle2">
+    <img src="icon.svg" class="icon-mask2" alt="icon">
+</div>
 
     <div class="container mt-5">
         <div class="d-flex justify-content-center">
