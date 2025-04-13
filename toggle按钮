@@ -1,0 +1,62 @@
+
+.toggle-btn {
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+}
+
+.toggle-btn.active {
+  background-color: dodgerblue;
+  color: white;
+  border-color: dodgerblue;
+}
+
+<div id="toggle-group">
+  <button data-value="A" class="toggle-btn">选项 A</button>
+  <button data-value="B" class="toggle-btn">选项 B</button>
+</div>
+
+<!-- 新增按钮 -->
+<button id="get-value-btn">获取当前选中的值</button>
+
+<p>当前值：<span id="current-value"></span></p>
+
+// ✅ 初始值
+let currentValue = "A";
+
+// 初始化函数，根据 currentValue 设置 active
+function initializeToggle() {
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    if (btn.dataset.value === currentValue) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+  document.getElementById("current-value").textContent = currentValue;
+}
+
+// toggle按钮点击事件
+document.querySelectorAll(".toggle-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentValue = btn.dataset.value;
+    document.getElementById("current-value").textContent = currentValue;
+  });
+});
+
+// 👉 新按钮点击时，获取当前活跃按钮的值
+document.getElementById("get-value-btn").addEventListener("click", () => {
+  const activeBtn = document.querySelector(".toggle-btn.active");
+  if (activeBtn) {
+    alert("当前选中的是：" + activeBtn.dataset.value);
+  } else {
+    alert("没有选中的按钮");
+  }
+});
+
+// 初始执行
+initializeToggle();
