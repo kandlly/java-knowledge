@@ -1,0 +1,131 @@
+gpt
+---------------------------------------------
+一个文件可能在多个版本中被多次修改，你只想要每个文件只出现一次的名字和路径。
+方案一：Windows（PowerShell）
+svn log -r 1:HEAD -v --xml |
+Select-String "<path>" |
+ForEach-Object {
+  ($_ -replace ".*<path[^>]*>", "") -replace "</path>", ""
+} |
+Sort-Object -Unique |
+Out-File changed_files.txt -Encoding UTF8
+
+
+方案二：Windows CMD（不推荐，复杂且处理XML较差） 出力xml文件
+svn log -r 1:HEAD -v --xml > svn_log.xml
+findstr "<path" svn_log.xml > raw_paths.txt
+
+方案三：Linux 或 Git Bash（推荐）
+svn log -r 1:HEAD -v --xml |
+grep "<path>" |
+sed -e 's/.*<path[^>]*>//' -e 's/<\/path>//' |
+sort |
+uniq > changed_files.txt
+
+---------------------------------------------
+ 去重（如果多次修改同一文件）
+svn diff -r 1:HEAD --summarize | awk '{print $2}' | sort -u > modified_files.txt
+---------------------------------------------
+
+直接针对仓库 URL（无需本地工作副本）
+svn diff -r 1:HEAD https://svn.example.com/svn/repo/ --summarize | awk '{print $2}' > modified_files.txt
+
+
+版本号准确性：
+svn log --stop-on-copy
+
+
+假设你的仓库 URL 为 https://svn.example.com/svn/myproject
+# 生成文件列表（直接操作仓库 URL）
+svn diff -r 1:HEAD https://svn.example.com/svn/myproject --summarize | awk '{print $2}' > modified_files.txt
+
+# 查看结果
+cat modified_files.txt
+输出结果类似：
+trunk/src/main.c
+trunk/docs/README.md
+branches/feature/new-module.py
+...
+
+
+---------------------------------------------
+方法 1：使用 CMD 命令提示符
+1. 一步生成去重后的文件路径列表
+svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > file_paths.txt
+
+解释：
+
+svn diff -r 1:HEAD --summarize：列出所有变更（A新增、M修改、R替换、D删除）。
+
+findstr /R "^[AMRD]"：筛选出变更的文件行。
+
+for /F "tokens=2" %i：提取每行的第二列（文件路径）。
+
+sort /UNIQUE：去重并排序。
+
+> file_paths.txt：保存结果到文件。
+
+2. 分步操作（更直观）
+
+:: 1. 生成原始变更列表
+svn diff -r 1:HEAD --summarize > changes_raw.txt
+
+:: 2. 提取路径并去重
+for /F "tokens=2" %i in (changes_raw.txt) do @echo %i >> changes_temp.txt
+sort changes_temp.txt /UNIQUE > file_paths.txt
+del changes_raw.txt changes_temp.txt
+
+方法 2：使用 PowerShell（更简洁高效）
+svn diff -r 1:HEAD --summarize | Where-Object { $_ -match '^[AMRD]' } | ForEach-Object { ($_ -split '\s+')[1] } | Sort-Object -Unique | Set-Content file_paths.txt
+
+解释：
+Where-Object { $_ -match '^[AMRD]' }：筛选出变更的文件行。
+
+($_ -split '\s+')[1]：提取路径。
+
+Sort-Object -Unique：去重并排序。
+
+Set-Content file_paths.txt：保存结果。
+生成的 file_paths.txt 内容示例：
+trunk/src/main.c
+trunk/docs/README.md
+branches/feature/new-module.py
+...
+
+扩展场景
+1. 直接操作仓库 URL（无需本地副本）
+svn diff -r 1:HEAD https://svn.example.com/svn/repo/ --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > file_paths.txt
+
+2. 过滤特定变更类型（如仅 M 修改）
+svn diff -r 1:HEAD --summarize | findstr "^M" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > modified_only.txt
+
+注意事项
+版本号准确性：
+
+如果仓库历史被清理过，起始版本可能不是 1。使用以下命令确认实际起始版本：
+svn log --stop-on-copy -l 1
+
+输出中最底部显示的版本号即为起始版本（替换命令中的 1）。
+
+路径空格处理：
+
+如果文件路径包含空格，上述命令已默认支持（无需额外引号）。
+
+示例流程：
+cd C:\Projects\my_svn_project  # 进入工作副本目录
+svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > file_paths.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
