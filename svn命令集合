@@ -116,7 +116,7 @@ cd C:\Projects\my_svn_project  # 进入工作副本目录
 svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > file_paths.txt
 
 
-------------------------------------------------------------------------------------------
+----------------------deepseek--------------------------------------------------------------------
 修复后的命令（CMD 版本）
 方法 1：直接通过 for /F 处理管道输入
 svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i IN ('more') DO @echo %i | sort /UNIQUE > file_paths.txt
@@ -144,4 +144,23 @@ svn diff -r 1:HEAD --summarize | Where-Object { $_ -match '^[AMRD]' } | ForEach-
 
 粘贴并执行上述命令。
 
+
+----------------------gpt--------------------------------------------------------------------
+正确做法（批处理语法）：
+步骤 1：提取路径列表（带操作类型）
+svn diff -r 1:HEAD --summarize > temp_changes.txt
+
+步骤 2：从中提取文件路径并去重
+for /F "tokens=2" %i in ('type temp_changes.txt') do @echo %i >> all_files.txt
+sort /UNIQUE all_files.txt > file_paths.txt
+
+一行搞定的 CMD 写法（推荐用法）
+for /F "tokens=2" %i in ('svn diff -r 1:HEAD --summarize ^| findstr /R "^[AMRD]"') do @echo %i >> all_files.txt && sort /UNIQUE all_files.txt > file_paths.txt
+
+
+更强一点的建议（改用 PowerShell）
+svn diff -r 1:HEAD --summarize |
+ForEach-Object { ($_ -split '\s+', 2)[1] } |
+Sort-Object -Unique |
+Out-File file_paths.txt -Encoding UTF8
 
