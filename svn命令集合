@@ -116,16 +116,32 @@ cd C:\Projects\my_svn_project  # 进入工作副本目录
 svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i in ('more') do @echo %i | sort /UNIQUE > file_paths.txt
 
 
+------------------------------------------------------------------------------------------
+修复后的命令（CMD 版本）
+方法 1：直接通过 for /F 处理管道输入
+svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" | for /F "tokens=2" %i IN ('more') DO @echo %i | sort /UNIQUE > file_paths.txt
 
+方法 2：分步操作（推荐）
+:: 1. 生成原始变更列表
+svn diff -r 1:HEAD --summarize | findstr /R "^[AMRD]" > changes_raw.txt
 
+:: 2. 提取路径并去重
+for /F "tokens=2" %i in (changes_raw.txt) do @echo %i >> changes_temp.txt
+sort changes_temp.txt /UNIQUE > file_paths.txt
 
+:: 3. 清理临时文件
+del changes_raw.txt changes_temp.txt
 
+更推荐使用 PowerShell
+PowerShell 的管道处理更健壮，可直接一步完成：
+svn diff -r 1:HEAD --summarize | Where-Object { $_ -match '^[AMRD]' } | ForEach-Object { ($_ -split '\s+')[1] } | Sort-Object -Unique | Set-Content file_paths.txt
 
+执行步骤：
 
+打开 PowerShell。
 
+进入 SVN 工作副本目录。
 
-
-
-
+粘贴并执行上述命令。
 
 
