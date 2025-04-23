@@ -1,0 +1,113 @@
+
+----deepseek----
+Sub CopyFilesToTargetFolder()
+    Dim fso As Object
+    Dim ws As Worksheet
+    Dim sourceFile As String
+    Dim targetFolder As String
+    Dim lastRow As Long
+    Dim i As Long
+    
+    ' 创建文件系统对象
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    ' 设置工作表（根据实际情况修改工作表名称）
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+    
+    ' 设置目标文件夹（从B1单元格获取路径）
+    targetFolder = ws.Range("B1").Value
+    If Right(targetFolder, 1) <> "\" Then targetFolder = targetFolder & "\"
+    
+    ' 自动创建目标文件夹
+    If Not fso.FolderExists(targetFolder) Then
+        fso.CreateFolder targetFolder
+    End If
+    
+    ' 获取文件列表最后一行（假设文件路径在A列）
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' 遍历文件列表
+    For i = 2 To lastRow  ' 假设第一行是标题
+        sourceFile = ws.Cells(i, 1).Value
+        
+        ' 跳过空单元格
+        If sourceFile = "" Then GoTo NextFile
+        
+        ' 检查源文件是否存在
+        If fso.FileExists(sourceFile) Then
+            On Error Resume Next
+            ' 复制文件（覆盖已存在文件）
+            fso.CopyFile sourceFile, targetFolder & fso.GetFileName(sourceFile), True
+            
+            ' 错误处理
+            If Err.Number <> 0 Then
+                ws.Cells(i, 2).Value = "失败：" & Err.Description  ' 在B列记录状态
+                Err.Clear
+            Else
+                ws.Cells(i, 2).Value = "成功"  ' 在B列记录状态
+            End If
+            On Error GoTo 0
+        Else
+            ws.Cells(i, 2).Value = "源文件不存在"
+        End If
+        
+NextFile:
+    Next i
+    
+    MsgBox "文件复制操作已完成，请检查B列状态！"
+    Set fso = Nothing
+End Sub
+
+----deepseek--  end--
+
+----gpt start--
+Sub CopyFilesBasedOnList()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim sourcePath As String
+    Dim destFolder As String
+    Dim fso As Object
+    Dim fileName As String
+    Dim destPath As String
+
+    ' 设置工作表
+    Set ws = ThisWorkbook.Sheets("Sheet1") ' 修改为实际的工作表名称
+
+    ' 获取最后一行
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+
+    ' 设置目标文件夹路径
+    destFolder = "C:\DestinationFolder\" ' 修改为实际的目标文件夹路径
+    If Right(destFolder, 1) <> "\" Then destFolder = destFolder & "\"
+
+    ' 创建 FileSystemObject
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    ' 遍历每一行
+    For i = 2 To lastRow ' 假设第一行为标题，从第二行开始
+        sourcePath = ws.Cells(i, 1).Value ' 假设文件路径在第1列
+        If fso.FileExists(sourcePath) Then
+            fileName = fso.GetFileName(sourcePath)
+            destPath = destFolder & fileName
+            On Error Resume Next
+            fso.CopyFile sourcePath, destPath, True
+            If Err.Number <> 0 Then
+                MsgBox "复制文件失败：" & sourcePath & vbCrLf & "错误信息：" & Err.Description
+                Err.Clear
+            End If
+            On Error GoTo 0
+        Else
+            MsgBox "源文件不存在：" & sourcePath
+        End If
+    Next i
+
+    MsgBox "文件复制完成。"
+End Sub
+
+----gpt end--
+
+
+
+
+
