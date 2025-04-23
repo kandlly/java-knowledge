@@ -108,6 +108,316 @@ End Sub
 ----gpt end--
 
 
+----------------------------------deepseek 改正后----------------------------------
 
+Sub CopyFilesWithFolderStructure()
+    Dim fso As Object
+    Dim ws As Worksheet
+    Dim sourceFile As String
+    Dim targetFolder As String
+    Dim targetPath As String
+    Dim driveName As String
+    Dim relativePath As String
+    Dim targetDir As String
+    Dim lastRow As Long
+    Dim i As Long
+    
+    ' 创建文件系统对象
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    ' 设置工作表（修改为实际的工作表名称）
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+    
+    ' 获取目标文件夹路径（从B1单元格）
+    targetFolder = ws.Range("B1").Value
+    If Right(targetFolder, 1) <> "\" Then targetFolder = targetFolder & "\"
+    
+    ' 自动创建目标根目录
+    If Not fso.FolderExists(targetFolder) Then
+        fso.CreateFolder targetFolder
+    End If
+    
+    ' 获取文件列表最后一行（A列）
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' 遍历文件列表
+    For i = 2 To lastRow
+        sourceFile = Trim(ws.Cells(i, 1).Value)
+        If sourceFile = "" Then GoTo NextFile
+        
+        ' 验证源文件存在性
+        If Not fso.FileExists(sourceFile) Then
+            ws.Cells(i, 2).Value = "源文件不存在"
+            GoTo NextFile
+        End If
+        
+        ' 提取相对路径（去掉盘符）
+        driveName = fso.GetDriveName(sourceFile)
+        If driveName <> "" Then
+            relativePath = Mid(sourceFile, Len(driveName) + 1)
+            If Left(relativePath, 1) = "\" Then relativePath = Mid(relativePath, 2)
+        Else
+            relativePath = sourceFile
+        End If
+        
+        ' 构建完整目标路径
+        targetPath = fso.BuildPath(targetFolder, relativePath)
+        targetDir = fso.GetParentFolderName(targetPath)
+        
+        ' 创建目录结构
+        If Not fso.FolderExists(targetDir) Then
+            On Error Resume Next
+            CreateMultipleFolders targetDir
+            If Err.Number <> 0 Then
+                ws.Cells(i, 2).Value = "目录创建失败：" & Err.Description
+                Err.Clear
+                GoTo NextFile
+            End If
+            On Error GoTo 0
+        End If
+        
+        ' 复制文件
+        On Error Resume Next
+        fso.CopyFile sourceFile, targetPath, True
+        If Err.Number <> 0 Then
+            ws.Cells(i, 2).Value = "失败：" & Err.Description
+            Err.Clear
+        Else
+            ws.Cells(i, 2).Value = "成功 -> " & targetPath
+        End If
+        On Error GoTo 0
+
+NextFile:
+    Next i
+    
+    MsgBox "文件复制完成！目录结构已保留"
+    Set fso = Nothing
+End Sub
+
+' 支持创建多级目录的辅助函数
+Sub CreateMultipleFolders(strPath As String)
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    If Not fso.FolderExists(strPath) Then
+        CreateMultipleFolders fso.GetParentFolderName(strPath)
+        fso.CreateFolder strPath
+    End If
+End Sub
+
+---------------------------------------------------
+' ファイルを元のフォルダ構造ごとコピーするマクロ
+Sub CopyFilesWithFolderStructure()
+    Dim fso As Object
+    Dim ws As Worksheet
+    Dim sourceFile As String
+    Dim targetFolder As String
+    Dim targetPath As String
+    Dim driveName As String
+    Dim relativePath As String
+    Dim targetDir As String
+    Dim lastRow As Long
+    Dim i As Long
+    
+    ' ファイルシステムオブジェクトを作成
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    ' ワークシートを設定（実際のシート名に変更してください）
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+    
+    ' コピー先フォルダパスを取得（B1セルから）
+    targetFolder = ws.Range("B1").Value
+    If Right(targetFolder, 1) <> "\" Then targetFolder = targetFolder & "\"
+    
+    ' コピー先ルートフォルダを作成（存在しない場合）
+    If Not fso.FolderExists(targetFolder) Then
+        fso.CreateFolder targetFolder
+    End If
+    
+    ' ファイルリストの最終行を取得（A列）
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' ファイルリストを処理
+    For i = 2 To lastRow
+        sourceFile = Trim(ws.Cells(i, 1).Value)
+        If sourceFile = "" Then GoTo NextFile
+        
+        ' ソースファイルの存在確認
+        If Not fso.FileExists(sourceFile) Then
+            ws.Cells(i, 2).Value = "ソースファイルが存在しません"
+            GoTo NextFile
+        End If
+        
+        ' 相対パスを抽出（ドライブ文字を除去）
+        driveName = fso.GetDriveName(sourceFile)
+        If driveName <> "" Then
+            relativePath = Mid(sourceFile, Len(driveName) + 1)
+            If Left(relativePath, 1) = "\" Then relativePath = Mid(relativePath, 2)
+        Else
+            relativePath = sourceFile
+        End If
+        
+        ' 完全なコピー先パスを構築
+        targetPath = fso.BuildPath(targetFolder, relativePath)
+        targetDir = fso.GetParentFolderName(targetPath)
+        
+        ' フォルダ構造を作成
+        If Not fso.FolderExists(targetDir) Then
+            On Error Resume Next
+            CreateMultipleFolders targetDir
+            If Err.Number <> 0 Then
+                ws.Cells(i, 2).Value = "フォルダ作成失敗：" & Err.Description
+                Err.Clear
+                GoTo NextFile
+            End If
+            On Error GoTo 0
+        End If
+        
+        ' ファイルをコピー
+        On Error Resume Next
+        fso.CopyFile sourceFile, targetPath, True
+        If Err.Number <> 0 Then
+            ws.Cells(i, 2).Value = "失敗：" & Err.Description
+            Err.Clear
+        Else
+            ws.Cells(i, 2).Value = "成功 -> " & targetPath
+        End If
+        On Error GoTo 0
+
+NextFile:
+    Next i
+    
+    MsgBox "ファイルのコピーが完了しました！フォルダ構造を保持しました"
+    Set fso = Nothing
+End Sub
+
+' 複数階層のフォルダを作成する補助関数
+Sub CreateMultipleFolders(strPath As String)
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    If Not fso.FolderExists(strPath) Then
+        CreateMultipleFolders fso.GetParentFolderName(strPath)
+        fso.CreateFolder strPath
+    End If
+End Sub
+----------------------------------
+
+
+----------------------------------gpt改正后-------start---------------------------
+
+Sub CopyFilesWithFolderStructure()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim sourcePath As String
+    Dim destFolder As String
+    Dim fso As Object
+    Dim relativePath As String
+    Dim destPath As String
+    Dim destDir As String
+    Dim fileName As String
+    Dim driveLetter As String
+    Dim pos As Long
+
+    ' ワークシートの設定
+    Set ws = ThisWorkbook.Sheets("Sheet1") ' 実際のシート名に変更してください
+
+    ' 最終行の取得
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+
+    ' ターゲットフォルダのパスを設定
+    destFolder = "C:\DestinationFolder" ' 実際のターゲットフォルダパスに変更してください
+    If Right(destFolder, 1) <> "\" Then destFolder = destFolder & "\"
+
+    ' FileSystemObjectの作成
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    ' 各行を処理
+    For i = 2 To lastRow ' 1行目はヘッダーと仮定
+        sourcePath = Trim(ws.Cells(i, 1).Value) ' ファイルパスは列Aにあると仮定
+
+        If fso.FileExists(sourcePath) Then
+            ' ドライブレターを取得（例：C:\）
+            driveLetter = fso.GetDriveName(sourcePath) & "\"
+
+            ' 相対パスを取得（ドライブレターを除いた部分）
+            relativePath = Mid(sourcePath, Len(driveLetter) + 1)
+
+            ' ファイル名を取得
+            fileName = fso.GetFileName(sourcePath)
+
+            ' 相対パスからディレクトリパスを取得
+            pos = InStrRev(relativePath, "\")
+            If pos > 0 Then
+                destDir = Left(relativePath, pos - 1)
+            Else
+                destDir = ""
+            End If
+
+            ' ターゲットディレクトリのフルパスを構築
+            destDir = fso.BuildPath(destFolder, destDir)
+
+            ' ターゲットディレクトリが存在しない場合は作成
+            If Not fso.FolderExists(destDir) Then
+                CreateFullPath fso, destDir
+            End If
+
+            ' ターゲットファイルのフルパスを構築
+            destPath = fso.BuildPath(destDir, fileName)
+
+            ' ファイルをコピー
+            On Error Resume Next
+            fso.CopyFile sourcePath, destPath, True
+            If Err.Number <> 0 Then
+                MsgBox "ファイルのコピーに失敗しました：" & vbCrLf & _
+                       "元ファイル：" & sourcePath & vbCrLf & _
+                       "エラー：" & Err.Description, vbExclamation
+                Err.Clear
+            End If
+            On Error GoTo 0
+        Else
+            MsgBox "元ファイルが存在しません：" & sourcePath, vbExclamation
+        End If
+    Next i
+
+    MsgBox "ファイルのコピーが完了しました。", vbInformation
+End Sub
+
+' 指定されたフルパスのフォルダを作成する関数
+Sub CreateFullPath(fso As Object, folderPath As String)
+    Dim pathParts() As String
+    Dim currentPath As String
+    Dim i As Long
+
+    pathParts = Split(folderPath, "\")
+    currentPath = ""
+
+    ' ドライブレターを含む最初の部分を処理
+    If InStr(folderPath, "\") > 0 Then
+        currentPath = pathParts(0) & "\"
+        i = 1
+    Else
+        i = 0
+    End If
+
+    ' 各フォルダを順に作成
+    For i = i To UBound(pathParts)
+        If pathParts(i) <> "" Then
+            currentPath = fso.BuildPath(currentPath, pathParts(i))
+            If Not fso.FolderExists(currentPath) Then
+                On Error Resume Next
+                fso.CreateFolder currentPath
+                If Err.Number <> 0 Then
+                    MsgBox "フォルダの作成に失敗しました：" & currentPath & vbCrLf & _
+                           "エラー：" & Err.Description, vbExclamation
+                    Err.Clear
+                End If
+                On Error GoTo 0
+            End If
+        End If
+    Next i
+End Sub
+----------------------------------gpt改正后-------end---------------------------
 
 
