@@ -41,3 +41,49 @@ public class DataFiller {
         return positions;
     }
 }
+
+
+
+import java.util.*;
+
+public class DataFiller {
+    public static void main(String[] args) {
+        // 构造输入数据：List of (Boolean, String)
+        List<Map.Entry<Boolean, String>> inputData = new ArrayList<>();
+        inputData.add(new AbstractMap.SimpleEntry<>(true, "Hello"));
+        inputData.add(new AbstractMap.SimpleEntry<>(false, "Ignored"));
+        inputData.add(new AbstractMap.SimpleEntry<>(true, "World"));
+
+        // 调用填充方法
+        String[] positions = fillPositions(inputData);
+
+        // 输出每个位置
+        System.out.println("position1: " + positions[0]);
+        System.out.println("position2: " + positions[1]);
+        System.out.println("position3: " + positions[2]);
+
+        // 输出拼接结果
+        System.out.println("拼接输出: " + 
+            (positions[0] == null ? "" : positions[0]) +
+            (positions[1] == null ? "" : positions[1]) +
+            (positions[2] == null ? "" : positions[2])
+        );
+    }
+
+    public static String[] fillPositions(List<Map.Entry<Boolean, String>> dataList) {
+        String[] positions = new String[3];
+        int posIndex = 0;
+
+        for (Map.Entry<Boolean, String> entry : dataList) {
+            if (entry.getKey() && entry.getValue() != null && !entry.getValue().isEmpty()) {
+                if (posIndex < 3) {
+                    positions[posIndex++] = entry.getValue();
+                } else {
+                    break; // 已填满3个位置
+                }
+            }
+        }
+
+        return positions;
+    }
+}
