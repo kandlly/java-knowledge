@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class TripleFilter {
+
+    // 自定义三元组类
+    public static class Triple {
+        public Boolean enabled;
+        public String key;
+        public String value;
+
+        public Triple(Boolean enabled, String key, String value) {
+            this.enabled = enabled;
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + enabled + ", " + key + ", " + value + ")";
+        }
+    }
+
+    // 过滤方法
+    public static List<Triple> filterEnabled(List<Triple> list) {
+        List<Triple> result = new ArrayList<>();
+        for (Triple t : list) {
+            if (Boolean.TRUE.equals(t.enabled)) {
+                result.add(t);
+            }
+        }
+        return result;
+    }
+
+    // 示例
+    public static void main(String[] args) {
+        List<Triple> dataList = Arrays.asList(
+            new Triple(true, "username", "alice"),
+            new Triple(false, "password", "secret"),
+            new Triple(true, "email", "alice@example.com")
+        );
+
+        List<Triple> filtered = filterEnabled(dataList);
+
+        System.out.println("过滤后数据：");
+        for (Triple t : filtered) {
+            System.out.println(t);
+        }
+    }
+}
