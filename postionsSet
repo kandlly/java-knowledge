@@ -1,0 +1,43 @@
+public class DataFiller {
+    public static void main(String[] args) {
+        // 三个布尔开关，控制是否填入
+        boolean b1 = true;
+        boolean b2 = false;
+        boolean b3 = true;
+
+        // 三个数据
+        String data1 = "Hello";
+        String data2 = "Skipped";
+        String data3 = "World";
+
+        String[] positions = fillPositions(
+            new boolean[]{b1, b2, b3},
+            new String[]{data1, data2, data3}
+        );
+
+        // 输出每个位置的值
+        System.out.println("position1: " + positions[0]);
+        System.out.println("position2: " + positions[1]);
+        System.out.println("position3: " + positions[2]);
+
+        // 拼接输出
+        System.out.println("拼接输出: " + String.join("", 
+            positions[0] == null ? "" : positions[0],
+            positions[1] == null ? "" : positions[1],
+            positions[2] == null ? "" : positions[2]
+        ));
+    }
+
+    public static String[] fillPositions(boolean[] flags, String[] data) {
+        String[] positions = new String[3];
+        int posIndex = 0;
+
+        for (int i = 0; i < flags.length && posIndex < 3; i++) {
+            if (flags[i] && data[i] != null && !data[i].isEmpty()) {
+                positions[posIndex++] = data[i];
+            }
+        }
+
+        return positions;
+    }
+}
